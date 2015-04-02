@@ -244,11 +244,36 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    var mainObj = obj;
+    //need to convert arguments to a true array
+    //  *ran into trouble testing this with JSBin because JSBin's underscore library's
+    //    _.last function accepted arguments just straight up.
+    var args = Array.prototype.slice.call(arguments);
+    // extenders is an array, whose elements are objects
+    var extenders = _.last(args, args.length-1);
+    _.each(extenders, function(eachObj){
+      for (var key in eachObj){
+        mainObj[key]=eachObj[key];
+      }
+    });
+    return(mainObj);
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    var mainObj = obj;
+    var args = Array.prototype.slice.call(arguments);
+    var extenders = _.last(args, args.length-1);
+    _.each(extenders, function(eachObj){
+      for (var key in eachObj){
+        //the difference here is that it will now check if mainObj already has that property
+        if (!(key in mainObj)) {
+          mainObj[key]=eachObj[key];
+        }
+      }
+    });
+    return(mainObj);
   };
 
 
