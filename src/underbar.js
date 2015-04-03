@@ -317,6 +317,22 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    // a new uniqArgs object is created per func
+    //  eg with the function add(a,b){return a+b;}
+    //     var memoAdd = _.memoize(add); is only called ONCE
+    //      - therefore, memoAdd(1,2) and memoAdd(3,4) share the same uniqArgs object
+    var uniqArgs ={};
+
+    return function(){
+      var arg = arguments[0]; //assuming only one argument
+
+      if (!(arg in uniqArgs)){
+        var result = func.apply(this, arguments);
+        uniqArgs[arg] = result;
+      }
+
+      return uniqArgs[arg];
+    };
   };
 
   // Delays a function for the given number of milliseconds, and then calls
