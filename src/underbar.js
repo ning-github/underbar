@@ -468,6 +468,25 @@
   //
   // Hint: Use Array.isArray to check if something is an array
   _.flatten = function(nestedArray, result) {
+    var output=[];
+    for(var i=0; i<nestedArray.length;i++){
+      var singleVal = nestedArray[i];
+      console.log(i);
+      if(Array.isArray(singleVal)){
+        if (!result){
+          singleVal = _.flatten(singleVal, result); //recursion (the call stack will come back here)
+        }
+        //once a particular nestedArray element has completed recursion, its output wll be traversed
+        //  and pushed to the "main" output
+        _.each(singleVal, function(each){
+          output.push(each);
+        });
+      }
+      else{
+        output.push(singleVal);
+      }
+    }
+    return output;
   };
 
   // Takes an arbitrary number of arrays and produces an array that contains
