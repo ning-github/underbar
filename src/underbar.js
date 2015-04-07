@@ -539,5 +539,27 @@
   //
   // Note: This is difficult! It may take a while to implement.
   _.throttle = function(func, wait) {
+
+    var result;
+    var firstCall = true; //the first call
+    var canSched = true; //control against overbooking
+
+    return function(args){  //the returned function uses closure
+      if (firstCall){       // the first call allows for calling func
+        firstCall = false;
+        canSched = true;      //reopens for scheduling  
+        result = func(args);  //where call of func actually occurs
+      }
+
+      if(canSched){
+        canSched=false; //now can't book multiple calls
+        setTimeout(function(){  
+          result = func(args); //calls func after waiting the the wait time
+          return result;  
+        },wait);                
+      }
+      
+      return result;  // the throttled function always returns the most current result
+    };
   };
 }());
