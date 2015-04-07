@@ -449,6 +449,18 @@
   // Example:
   // _.zip(['a','b','c','d'], [1,2,3]) returns [['a',1], ['b',2], ['c',3], ['d',undefined]]
   _.zip = function() {
+    var arraysPassed = Array.prototype.slice.call(arguments);
+    var output=[];
+    
+    for (var i = 0; i<arraysPassed.length;i++){
+      var eachPush = [];
+      for(var j =0; j<arraysPassed.length;j++){
+        eachPush.push(arraysPassed[j][i]);
+      }
+      output.push(eachPush);
+    }
+    
+    return output;
   };
 
   // Takes a multidimensional array and converts it to a one-dimensional array.
